@@ -2,7 +2,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKe
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ConversationHandler, filters
 import random, string
 
-BOT_TOKEN, ADMIN_ID, PUBLIC_CHANNEL = "8894281974:AAF3", "YOUR_ADMIN_ID", "YOUR_CHANNEL"
+BOT_TOKEN, ADMIN_ID, PUBLIC_CHANNEL = "8894281974:AAF3qi9-AnGWos_u8kcMTxk-pUaLA1x2qnk", "YOUR_ADMIN_ID", "YOUR_CHANNEL"
 USERNAME, AMOUNT, EXPLANATION, PROOF_LINK, CONFIRM = range(5)
 
 def get_menu():
