@@ -6,7 +6,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, Conversati
 
 # --- CONFIG ---
 BOT_TOKEN = "8894281974:AAF3qi9-AnGWos_u8kcMTxk-pUaLA1x2qnk"
-ADMIN_CHANNEL = -100xxxxxxxxxx # Yahan apni channel ID daalein
+ADMIN_CHANNEL = "-100xxxxxxxxxx" # Yahan apni channel ID daalein
 
 USERNAME, AMOUNT, SUMMARY, PROOF_LINK = range(4)
 
