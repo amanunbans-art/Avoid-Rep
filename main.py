@@ -1,5 +1,19 @@
 import os
-import re
+from threading import Thread
+from flask import Flask
+
+web_app = Flask(__name__)
+
+@web_app.route("/")
+def health():
+    return "Avoid Report Bot is running", 200
+
+def run_web_server():
+    port = int(os.environ.get("PORT", 10000))
+    web_app.run(host="0.0.0.0", port=port)
+
+Thread(target=run_web_server, daemon=True).start()
+import  re
 import logging
 from html import escape
 from urllib.parse import urlparse
