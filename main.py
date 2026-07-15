@@ -1,943 +1,1529 @@
-Create a complete, production-ready Telegram bot called “AVOID REPORTS” for my Telegram channel @avoidrep.
-
-The bot is a community scam-report submission and moderation system. Users can submit reports about accounts involved in alleged scams. No report should be automatically published. Every report must first go to a private admin review chat, and only an admin can approve or reject it.
-
-Use a clean, professional, premium-looking Telegram UI with inline buttons, emojis, clear formatting, Back buttons, Cancel buttons, and proper error handling.
-
-IMPORTANT CONFIGURATION:
-- Public Channel: @avoidrep
-- Use environment variables for BOT_TOKEN, ADMIN_IDS, ADMIN_CHAT_ID, and CHANNEL_USERNAME.
-- Never hardcode the bot token.
-- The bot must use persistent database storage so reports remain saved after restart.
-- Generate unique report IDs in this format: #AVD0001, #AVD0002, #AVD0003, etc.
-- Escape all user-generated text before displaying it with HTML parse mode.
-- Only configured admins can approve, reject, ban users, broadcast, or access the admin panel.
-
-==================================================
-1. START COMMAND
-==================================================
-
-When a user sends /start, show:
-
-🛡️ WELCOME TO AVOID REPORTS
-
-A community-driven reporting platform designed to help users submit and review reports related to potentially fraudulent deals.
-
-📋 Every report is manually reviewed by our moderation team before publication.
-
-⚠️ False, incomplete, misleading, or manipulated reports may be rejected.
-
-Choose an option below to continue.
-
-🛡️ Powered by @avoidrep
-
-Buttons:
-
-🚨 Report a Scammer
-🔍 Search Reports
-📋 My Reports
-📜 Reporting Guidelines
-📢 Join @avoidrep
-
-The “Join @avoidrep” button must open:
-https://t.me/avoidrep
-
-==================================================
-2. REPORT A SCAMMER
-==================================================
-
-When the user presses:
-
-🚨 Report a Scammer
-
-Show:
-
-🚨 CREATE A NEW REPORT
-
-Please select the platform where the incident occurred.
-
-Buttons:
-
-✈️ Telegram
-📸 Instagram
-🌐 Other
-❌ Cancel
-
-Save the selected platform and continue.
-
-==================================================
-3. ACCUSED USER INFORMATION
-==================================================
-
-Show:
-
-👤 REPORTED ACCOUNT INFORMATION
-
-Please send the username of the account you want to report.
-
-Examples:
-
-@username
-
-For Telegram reports, you may also send a numeric Telegram User ID if the account does not have a username.
-
-Example:
-
-123456789
-
-⚠️ Please make sure you are reporting the correct account.
-
-Validate the input.
-
-For a username:
-- Accept @username
-- Store the username without duplicate @ symbols
-- Preserve the original username for display
-
-For numeric IDs:
-- Accept numeric Telegram User IDs
-
-Then continue.
-
-==================================================
-4. DEAL VALUE
-==================================================
-
-Show:
-
-💰 DEAL VALUE
-
-Enter the total amount involved in the deal.
-
-Examples:
-
-$100
-₹5,000
-100 USDT
-
-If no money was involved, send:
-
-0
-
-Save the value and continue.
-
-==================================================
-5. INCIDENT DESCRIPTION
-==================================================
-
-Show:
-
-📝 INCIDENT DETAILS
-
-Briefly explain what happened.
-
-Please include:
-
-• What the deal was for
-• What you paid, sent, or provided
-• What the other party agreed to do
-• What went wrong
-
-Keep your explanation clear, factual, and concise.
-
-Minimum description length: 20 characters.
-Maximum description length: 3000 characters.
-
-Save the description and continue.
-
-==================================================
-6. EVIDENCE SUBMISSION
-==================================================
-
-Show:
-
-📂 SUBMIT EVIDENCE
-
-Create a Telegram channel containing all relevant evidence and send the channel link here.
-
-Your evidence channel should preferably include:
-
-• Full conversation screenshots
-• Screen recording of the conversation
-• Reported account's profile
-• Username and User ID, if available
-• Payment or transaction proof
-• Any other relevant evidence
-
-Public or private Telegram channel invite links are accepted.
-
-Example:
-
-https://t.me/+xxxxxxxx
-
-⚠️ Incomplete, misleading, or manipulated evidence may result in the report being rejected.
-
-Only accept valid Telegram links beginning with:
-https://t.me/
-
-Save the evidence link and continue.
-
-==================================================
-7. REVIEW REPORT BEFORE SUBMISSION
-==================================================
-
-Show a complete preview:
-
-🔎 REVIEW YOUR REPORT
-
-━━━━━━━━━━━━━━━━━━
-
-🚨 REPORT DETAILS
-
-📱 Platform: {platform}
-👤 Reported Account: {username_or_user_id}
-💰 Deal Value: {deal_value}
-
-📝 Incident Details:
-
-{description}
-
-📂 Evidence:
-
-{evidence_link}
-
-━━━━━━━━━━━━━━━━━━
-
-⚠️ By submitting this report, you confirm that the information and evidence provided are accurate to the best of your knowledge.
-
-Buttons:
-
-✅ Submit Report
-✏️ Edit Report
-🔄 Start Again
-❌ Cancel
-
-The Edit Report button should show:
-
-✏️ EDIT REPORT
-
-Choose what you want to edit:
-
-📱 Platform
-👤 Reported Account
-💰 Deal Value
-📝 Description
-📂 Evidence
-⬅️ Back to Preview
-
-After editing any field, return to the report preview.
-
-==================================================
-8. SUBMIT REPORT
-==================================================
-
-When the user presses:
-
-✅ Submit Report
-
-Create a unique report ID.
-
-Example:
-
-#AVD0001
-
-Save all information to the database.
-
-Show the user:
-
-✅ REPORT SUBMITTED SUCCESSFULLY
-
-Your report has been sent to the AVOID REPORTS moderation team for manual review.
-
-🆔 Report ID: #AVD0001
-⏳ Status: Pending Review
-
-You will receive an update when your report is:
-
-✅ Approved
-❌ Rejected
-📩 Returned for Additional Evidence
-
-You can check the status of your report at any time from “My Reports”.
-
-⚠️ False reports or manipulated evidence may result in reporting restrictions.
-
-🛡️ @avoidrep
-
-Buttons:
-
-📋 My Reports
-🏠 Main Menu
-
-==================================================
-9. SEND NEW REPORT TO PRIVATE ADMIN CHAT
-==================================================
-
-Immediately send the complete report to ADMIN_CHAT_ID.
-
-Admin message:
-
-🚨 NEW REPORT RECEIVED
-
-━━━━━━━━━━━━━━━━━━
-
-🆔 Report ID: #AVD0001
-⏳ Status: PENDING REVIEW
-
-👤 REPORTER
-
-Username: @reporter
-User ID: 123456789
-
-🚨 REPORTED ACCOUNT
-
-Platform: Telegram
-Username: @username
-User ID: 987654321
-
-💰 DEAL VALUE
-
-$100
-
-📝 INCIDENT DETAILS
-
-{description}
-
-📂 EVIDENCE
-
-{evidence_link}
-
-━━━━━━━━━━━━━━━━━━
-
-Submitted: {date_and_time}
-
-Admin buttons:
-
-✅ Approve
-❌ Reject
-📩 Request More Proof
-👤 View Reporter
-📂 Open Evidence
-🚫 Ban Reporter
-
-If the reported Telegram account has a valid username, also show:
-
-👤 View Reported User
-
-==================================================
-10. APPROVE REPORT
-==================================================
-
-Only configured admins can use the Approve button.
-
-Before final approval, show:
-
-⚠️ CONFIRM APPROVAL
-
-Are you sure you want to approve and publish report #AVD0001 to @avoidrep?
-
-Buttons:
-
-✅ Confirm & Publish
-❌ Cancel
-
-When confirmed:
-
-- Change report status to APPROVED.
-- Save the reviewing admin ID.
-- Save review date and time.
-- Automatically publish the report to @avoidrep.
-- Save the published channel message ID.
-- Notify the reporter.
-
-Reporter notification:
-
-✅ YOUR REPORT HAS BEEN APPROVED
-
-🆔 Report ID: #AVD0001
-
-Your report has been reviewed and approved by the AVOID REPORTS moderation team.
-
-The report has now been published to @avoidrep.
-
-Thank you for helping the community review potential risks.
-
-Buttons:
-
-📢 View Published Report
-🏠 Main Menu
-
-==================================================
-11. PUBLIC CHANNEL POST
-==================================================
-
-Publish approved reports to @avoidrep using this format:
-
-🚨 COMMUNITY SAFETY REPORT
-
-━━━━━━━━━━━━━━━━━━
-
-🆔 REPORT ID
-#AVD0001
-
-👤 REPORTED ACCOUNT
-@username
-
-🆔 USER ID
-987654321
-
-📱 PLATFORM
-Telegram
-
-💰 REPORTED DEAL VALUE
-$100
-
-📝 INCIDENT SUMMARY
-
-{description}
-
-📂 EVIDENCE
-
-Supporting evidence is available through the button below.
-
-━━━━━━━━━━━━━━━━━━
-
-⚠️ This post records a community-submitted report reviewed by the moderation team based on the evidence provided. Users should review the available evidence and make their own assessment before dealing.
-
-🛡️ AVOID REPORTS
-@avoidrep
-
-Buttons:
-
-👤 View Profile
-📂 View Evidence
-
-The View Profile button should only appear when a valid profile URL can be created.
-
-The View Evidence button should open the submitted evidence link.
-
-==================================================
-12. REJECT REPORT
-==================================================
-
-When an admin presses:
-
-❌ Reject
-
-Show rejection reasons:
-
-📂 Insufficient Evidence
-🧩 Incomplete Proof
-🚫 Invalid Evidence
-🔍 Unable to Verify
-⚠️ Misleading Information
-✍️ Custom Reason
-⬅️ Back
-
-If “Custom Reason” is selected, ask the admin to type the rejection reason.
-
-After selecting a reason, show:
-
-⚠️ CONFIRM REJECTION
-
-Report: #AVD0001
-
-Reason:
-{rejection_reason}
-
-Are you sure you want to reject this report?
-
-Buttons:
-
-❌ Confirm Rejection
-⬅️ Back
-
-After confirmation:
-
-- Change status to REJECTED.
-- Save the rejection reason.
-- Save admin ID.
-- Save review date and time.
-- Notify the reporter.
-
-Reporter notification:
-
-❌ REPORT REJECTED
-
-🆔 Report ID: #AVD0001
-
-Your report was reviewed but could not be approved.
-
-Reason:
-
-{rejection_reason}
-
-You may submit a new report if you can provide complete and verifiable information or evidence.
-
-🛡️ @avoidrep
-
-Buttons:
-
-🚨 Submit New Report
-🏠 Main Menu
-
-==================================================
-13. REQUEST MORE PROOF
-==================================================
-
-When an admin presses:
-
-📩 Request More Proof
-
-Ask the admin:
-
-📩 REQUEST ADDITIONAL EVIDENCE
-
-Please enter a short message explaining what additional evidence is required.
-
-Example:
-
-Please provide a full screen recording of the conversation and payment proof.
-
-After the admin submits the request:
-
-- Change report status to MORE PROOF REQUIRED.
-- Save the admin request.
-- Notify the reporter.
-
-Reporter message:
-
-📩 ADDITIONAL EVIDENCE REQUIRED
-
-🆔 Report ID: #AVD0001
-
-The moderation team requires additional evidence before a final decision can be made.
-
-Moderator Request:
-
-{admin_request}
-
-Please submit the requested evidence below.
-
-Button:
-
-📂 Submit Additional Evidence
-
-When the user presses the button:
-
-Ask them to send a new or updated Telegram evidence channel link.
-
-After receiving a valid link:
-
-- Update the evidence link.
-- Change status back to PENDING REVIEW.
-- Send the updated report back to the admin review chat.
-- Notify the user.
-
-User confirmation:
-
-✅ ADDITIONAL EVIDENCE SUBMITTED
-
-🆔 Report ID: #AVD0001
-
-Your updated evidence has been submitted to the moderation team.
-
-⏳ Status: Pending Review
-
-==================================================
-14. SEARCH REPORTS
-==================================================
-
-When the user presses:
-
-🔍 Search Reports
-
-Show:
-
-🔍 SEARCH REPORTS
-
-Send an exact username or numeric User ID.
-
-Examples:
-
-@username
-123456789
-
-The bot will search approved reports in the AVOID REPORTS database.
-
-If no approved report is found:
-
-✅ NO APPROVED REPORT FOUND
-
-No approved report was found for this username or User ID in the AVOID REPORTS database.
-
-⚠️ This does not guarantee that an account is trustworthy. Always verify independently before making a deal.
-
-Buttons:
-
-🔍 Search Again
-🏠 Main Menu
-
-If approved reports are found:
-
-🚨 APPROVED REPORTS FOUND
-
-👤 Account: @username
-📊 Approved Reports: 2
-
-Recent Report IDs:
-
-#AVD0001
-#AVD0042
-
-⚠️ Review the available reports and evidence before making your own decision.
-
-Buttons:
-
-📋 View Reports
-🔍 Search Again
-🏠 Main Menu
-
-When “View Reports” is pressed, allow the user to browse approved reports one by one with:
-
-⬅️ Previous
-➡️ Next
-📂 View Evidence
-🏠 Main Menu
-
-==================================================
-15. MY REPORTS
-==================================================
-
-When the user presses:
-
-📋 My Reports
-
-Show only reports submitted by that Telegram user.
-
-Example:
-
-📋 MY REPORTS
-
-1. #AVD0001
-Status: ✅ Approved
-
-2. #AVD0002
-Status: ⏳ Pending Review
-
-3. #AVD0003
-Status: ❌ Rejected
-
-Buttons should allow the user to open a specific report.
-
-Report details:
-
-📋 REPORT DETAILS
-
-🆔 Report ID: #AVD0001
-📱 Platform: Telegram
-👤 Reported Account: @username
-💰 Deal Value: $100
-📅 Submitted: {date}
-✅ Status: Approved
-
-If rejected, also show:
-
-❌ Rejection Reason:
-{reason}
-
-If more proof is required, show:
-
-📩 Moderator Request:
-{request}
-
-==================================================
-16. DUPLICATE REPORT DETECTION
-==================================================
-
-Before submitting a report, check whether the same username or User ID already has approved reports.
-
-If approved reports already exist, show:
-
-⚠️ EXISTING REPORT FOUND
-
-This account already has approved reports in the AVOID REPORTS database.
-
-👤 Account: @username
-📊 Existing Approved Reports: 2
-
-You may still submit a new report if your case involves a separate incident.
-
-Buttons:
-
-✅ Continue New Report
-📋 View Existing Reports
-❌ Cancel
-
-Do not automatically block legitimate separate reports.
-
-==================================================
-17. ADMIN PANEL
-==================================================
-
-Command:
-
-/admin
-
-Only ADMIN_IDS can access it.
-
-Show:
-
-🛡️ AVOID REPORTS — ADMIN PANEL
-
-Choose an option below.
-
-Buttons:
-
-📊 Statistics
-⏳ Pending Reports
-📩 More Proof Required
-✅ Approved Reports
-❌ Rejected Reports
-🔍 Search Database
-🚫 Banned Reporters
-📢 Broadcast
-📜 Admin Logs
-
-==================================================
-18. ADMIN STATISTICS
-==================================================
-
-Show:
-
-📊 AVOID REPORTS STATISTICS
-
-👥 Total Bot Users: {count}
-
-📋 Total Reports: {count}
-⏳ Pending: {count}
-📩 More Proof Required: {count}
-✅ Approved: {count}
-❌ Rejected: {count}
-
-🚨 Unique Reported Accounts: {count}
-🚫 Banned Reporters: {count}
-
-📅 Reports Today: {count}
-📅 Approved Today: {count}
-
-==================================================
-19. ADMIN PENDING REPORTS
-==================================================
-
-Show pending reports with pagination.
-
-Each item should display:
-
-🆔 #AVD0001
-👤 @username
-💰 $100
-📅 {date}
-
-Buttons:
-
-👁 Open Report
-⬅️ Previous
-➡️ Next
-🏠 Admin Panel
-
-==================================================
-20. BAN / UNBAN REPORTER
-==================================================
-
-Admin commands:
-
-/ban USER_ID
-/unban USER_ID
-
-When banned:
-
-- User can still use the bot to view/search public reports.
-- User cannot submit new reports.
-- User cannot submit additional evidence.
-- Show:
-
-🚫 REPORTING ACCESS RESTRICTED
-
-Your account is currently restricted from submitting reports.
-
-If you believe this is an error, contact the moderation team.
-
-When unbanned:
-
-Restore reporting access.
-
-==================================================
-21. BROADCAST SYSTEM
-==================================================
-
-Admin Panel → 📢 Broadcast
-
-Ask admin to send a message.
-
-Then show preview:
-
-📢 BROADCAST PREVIEW
-
-{message}
-
-Send this message to all bot users?
-
-Buttons:
-
-✅ Send Broadcast
-❌ Cancel
-
-After completion:
-
-✅ BROADCAST COMPLETED
-
-Successfully Delivered: {count}
-Failed: {count}
-
-Support text, photos, videos, and documents where possible by copying the original Telegram message.
-
-==================================================
-22. ADMIN LOGS
-==================================================
-
-Store important admin actions:
-
-- Report approved
-- Report rejected
-- More proof requested
-- Reporter banned
-- Reporter unbanned
-- Broadcast sent
-
-Each log should store:
-
-- Admin ID
-- Admin username
-- Action
-- Report ID if applicable
-- Target user if applicable
-- Date and time
-
-Admin panel should display recent logs with pagination.
-
-==================================================
-23. DATABASE
-==================================================
-
-Use persistent SQLite database storage.
-
-Create tables for:
-
-USERS:
-- telegram_id
-- username
-- first_name
-- joined_at
-- is_banned
-
-REPORTS:
-- id
-- report_id
-- reporter_id
-- reporter_username
-- platform
-- accused_username
-- accused_user_id
-- deal_value
-- description
-- evidence_link
-- status
-- rejection_reason
-- more_proof_request
-- admin_id
-- admin_message_id
-- channel_message_id
-- created_at
-- reviewed_at
-
-ADMIN_LOGS:
-- id
-- admin_id
-- admin_username
-- action
-- report_id
-- target_user_id
-- created_at
-
-==================================================
-24. SECURITY AND VALIDATION
-==================================================
-
-Implement:
-
-- Admin-only callback validation
-- Persistent database
-- HTML escaping for all user-generated content
-- Telegram link validation
-- Username validation
-- Numeric User ID validation
-- Duplicate callback protection
-- Prevent a report from being approved or rejected twice
-- Rate limiting for report submissions
-- Reporter ban system
-- Safe exception handling
-- Logging
-- Database initialization on startup
-- Environment variable validation
-- Graceful handling when users block the bot
-- Graceful handling when a channel post fails
-- Do not mark a report approved if publishing to @avoidrep fails
-- Store channel message IDs after successful publication
-- Preserve all report data after bot restart
-
-==================================================
-25. ENVIRONMENT VARIABLES
-==================================================
-
-Use:
-
-BOT_TOKEN=
-ADMIN_IDS=
-ADMIN_CHAT_ID=
-CHANNEL_USERNAME=@avoidrep
-
-ADMIN_IDS must support multiple numeric Telegram IDs separated by commas.
-
-Example:
-
-ADMIN_IDS=123456789,987654321
-
-==================================================
-26. PROJECT FILES
-==================================================
-
-Generate the complete working project with:
-
-bot.py
-database.py
-requirements.txt
-.env.example
-.gitignore
-README.md
-
-Use Python with aiogram 3.x.
-
-The project must be complete and directly runnable.
-
-Do not give pseudocode.
-Do not leave TODO sections.
-Do not omit functions.
-Do not use placeholder logic except for environment variable values.
-Make every button functional.
-Make every state transition functional.
-Make all database operations functional.
-Make all admin actions functional.
-Make the project compatible with GitHub deployment and standard Python hosting.
-
-The final result should be a complete, polished, working AVOID REPORTS Telegram bot for @avoidrep.
+import asyncio
+import html
+import logging
+import os
+import re
+import sqlite3
+from datetime import datetime, timezone
+from pathlib import Path
+
+from aiogram import Bot, Dispatcher, F, Router
+from aiogram.enums import ParseMode
+from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError
+from aiogram.filters import Command, CommandStart
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import (
+    CallbackQuery,
+    FSInputFile,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+)
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
+ADMIN_CHAT_ID_RAW = os.getenv("ADMIN_CHAT_ID", "").strip()
+CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME", "@avoidrep").strip()
+
+ADMIN_IDS = {
+    int(x.strip())
+    for x in os.getenv("ADMIN_IDS", "").split(",")
+    if x.strip().lstrip("-").isdigit()
+}
+
+if not BOT_TOKEN:
+    raise RuntimeError("BOT_TOKEN environment variable is missing.")
+
+if not ADMIN_CHAT_ID_RAW.lstrip("-").isdigit():
+    raise RuntimeError("ADMIN_CHAT_ID environment variable is missing or invalid.")
+
+ADMIN_CHAT_ID = int(ADMIN_CHAT_ID_RAW)
+
+if not CHANNEL_USERNAME.startswith("@"):
+    CHANNEL_USERNAME = "@" + CHANNEL_USERNAME
+
+CHANNEL_LINK = f"https://t.me/{CHANNEL_USERNAME.lstrip('@')}"
+
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / "avoid_reports.db"
+BANNER_PATH = BASE_DIR / "banner.jpg"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+
+logger = logging.getLogger("avoid-reports")
+
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher(storage=MemoryStorage())
+router = Router()
+dp.include_router(router)
+
+
+# ============================================================
+# DATABASE
+# ============================================================
+
+def db_connect():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    with db_connect() as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS users (
+                telegram_id INTEGER PRIMARY KEY,
+                username TEXT,
+                first_name TEXT,
+                joined_at TEXT NOT NULL,
+                is_banned INTEGER NOT NULL DEFAULT 0
+            )
+            """
+        )
+
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS reports (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                report_id TEXT UNIQUE,
+                reporter_id INTEGER NOT NULL,
+                reporter_username TEXT,
+                platform TEXT NOT NULL,
+                accused TEXT NOT NULL,
+                deal_value TEXT NOT NULL,
+                description TEXT NOT NULL,
+                evidence_link TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'pending',
+                rejection_reason TEXT,
+                admin_id INTEGER,
+                admin_message_id INTEGER,
+                channel_message_id INTEGER,
+                created_at TEXT NOT NULL,
+                reviewed_at TEXT
+            )
+            """
+        )
+
+        conn.commit()
+
+
+def now_iso():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def add_or_update_user(user):
+    with db_connect() as conn:
+        conn.execute(
+            """
+            INSERT INTO users (
+                telegram_id,
+                username,
+                first_name,
+                joined_at,
+                is_banned
+            )
+            VALUES (?, ?, ?, ?, 0)
+            ON CONFLICT(telegram_id) DO UPDATE SET
+                username = excluded.username,
+                first_name = excluded.first_name
+            """,
+            (
+                user.id,
+                user.username,
+                user.first_name,
+                now_iso(),
+            ),
+        )
+        conn.commit()
+
+
+def is_user_banned(user_id: int) -> bool:
+    with db_connect() as conn:
+        row = conn.execute(
+            "SELECT is_banned FROM users WHERE telegram_id = ?",
+            (user_id,),
+        ).fetchone()
+
+        return bool(row and row["is_banned"])
+
+
+def set_user_banned(user_id: int, banned: bool):
+    with db_connect() as conn:
+        conn.execute(
+            """
+            INSERT INTO users (
+                telegram_id,
+                username,
+                first_name,
+                joined_at,
+                is_banned
+            )
+            VALUES (?, NULL, NULL, ?, ?)
+            ON CONFLICT(telegram_id) DO UPDATE SET
+                is_banned = excluded.is_banned
+            """,
+            (
+                user_id,
+                now_iso(),
+                1 if banned else 0,
+            ),
+        )
+        conn.commit()
+
+
+def create_report(
+    reporter_id: int,
+    reporter_username: str | None,
+    platform: str,
+    accused: str,
+    deal_value: str,
+    description: str,
+    evidence_link: str,
+):
+    with db_connect() as conn:
+        cursor = conn.execute(
+            """
+            INSERT INTO reports (
+                reporter_id,
+                reporter_username,
+                platform,
+                accused,
+                deal_value,
+                description,
+                evidence_link,
+                status,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)
+            """,
+            (
+                reporter_id,
+                reporter_username,
+                platform,
+                accused,
+                deal_value,
+                description,
+                evidence_link,
+                now_iso(),
+            ),
+        )
+
+        database_id = cursor.lastrowid
+        report_id = f"AVD{database_id:04d}"
+
+        conn.execute(
+            """
+            UPDATE reports
+            SET report_id = ?
+            WHERE id = ?
+            """,
+            (
+                report_id,
+                database_id,
+            ),
+        )
+
+        conn.commit()
+
+    return report_id
+
+
+def get_report(report_id: str):
+    with db_connect() as conn:
+        return conn.execute(
+            """
+            SELECT *
+            FROM reports
+            WHERE report_id = ?
+            """,
+            (report_id,),
+        ).fetchone()
+
+
+def set_admin_message_id(report_id: str, message_id: int):
+    with db_connect() as conn:
+        conn.execute(
+            """
+            UPDATE reports
+            SET admin_message_id = ?
+            WHERE report_id = ?
+            """,
+            (
+                message_id,
+                report_id,
+            ),
+        )
+        conn.commit()
+
+
+def approve_report_db(
+    report_id: str,
+    admin_id: int,
+    channel_message_id: int,
+):
+    with db_connect() as conn:
+        conn.execute(
+            """
+            UPDATE reports
+            SET
+                status = 'approved',
+                admin_id = ?,
+                channel_message_id = ?,
+                reviewed_at = ?
+            WHERE report_id = ?
+              AND status = 'pending'
+            """,
+            (
+                admin_id,
+                channel_message_id,
+                now_iso(),
+                report_id,
+            ),
+        )
+        conn.commit()
+
+
+def reject_report_db(
+    report_id: str,
+    admin_id: int,
+    reason: str,
+):
+    with db_connect() as conn:
+        conn.execute(
+            """
+            UPDATE reports
+            SET
+                status = 'rejected',
+                admin_id = ?,
+                rejection_reason = ?,
+                reviewed_at = ?
+            WHERE report_id = ?
+              AND status = 'pending'
+            """,
+            (
+                admin_id,
+                reason,
+                now_iso(),
+                report_id,
+            ),
+        )
+        conn.commit()
+
+
+def get_user_reports(user_id: int):
+    with db_connect() as conn:
+        return conn.execute(
+            """
+            SELECT *
+            FROM reports
+            WHERE reporter_id = ?
+            ORDER BY id DESC
+            LIMIT 20
+            """,
+            (user_id,),
+        ).fetchall()
+
+
+def search_approved_reports(query: str):
+    normalized = query.strip().lower()
+
+    with db_connect() as conn:
+        return conn.execute(
+            """
+            SELECT *
+            FROM reports
+            WHERE status = 'approved'
+              AND LOWER(accused) = ?
+            ORDER BY id DESC
+            LIMIT 20
+            """,
+            (normalized,),
+        ).fetchall()
+
+
+# ============================================================
+# STATES
+# ============================================================
+
+class ReportStates(StatesGroup):
+    choosing_platform = State()
+    waiting_accused = State()
+    waiting_amount = State()
+    waiting_description = State()
+    waiting_evidence = State()
+    reviewing = State()
+
+
+class SearchStates(StatesGroup):
+    waiting_query = State()
+
+
+class AdminStates(StatesGroup):
+    waiting_rejection_reason = State()
+
+
+# ============================================================
+# HELPERS
+# ============================================================
+
+def esc(value) -> str:
+    return html.escape(str(value or ""))
+
+
+def is_admin(user_id: int) -> bool:
+    return user_id in ADMIN_IDS
+
+
+def valid_accused(value: str) -> bool:
+    value = value.strip()
+
+    if re.fullmatch(r"@[A-Za-z0-9_]{5,32}", value):
+        return True
+
+    if value.isdigit() and 5 <= len(value) <= 20:
+        return True
+
+    return False
+
+
+def valid_telegram_link(value: str) -> bool:
+    return bool(
+        re.fullmatch(
+            r"https://t\.me/[A-Za-z0-9_+\-/]+",
+            value.strip(),
+        )
+    )
+
+
+def profile_url(accused: str) -> str | None:
+    accused = accused.strip()
+
+    if accused.startswith("@"):
+        return f"https://t.me/{accused[1:]}"
+
+    return None
+
+
+def main_menu():
+    kb = InlineKeyboardBuilder()
+
+    kb.button(
+        text="🚨 Report a Scammer",
+        callback_data="create_report",
+    )
+
+    kb.button(
+        text="🔍 Search Reports",
+        callback_data="search_reports",
+    )
+
+    kb.button(
+        text="📋 My Reports",
+        callback_data="my_reports",
+    )
+
+    kb.row(
+        InlineKeyboardButton(
+            text=f"📢 Join {CHANNEL_USERNAME}",
+            url=CHANNEL_LINK,
+        )
+    )
+
+    kb.adjust(1)
+
+    return kb.as_markup()
+
+
+def cancel_keyboard():
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="❌ Cancel",
+                    callback_data="cancel_report",
+                )
+            ]
+        ]
+    )
+
+
+def platform_keyboard():
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="✈️ Telegram",
+                    callback_data="platform:Telegram",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="📸 Instagram",
+                    callback_data="platform:Instagram",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🌐 Other",
+                    callback_data="platform:Other",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="❌ Cancel",
+                    callback_data="cancel_report",
+                )
+            ],
+        ]
+    )
+
+
+def review_keyboard():
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="✅ Submit Report",
+                    callback_data="submit_report",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🔄 Start Again",
+                    callback_data="create_report",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="❌ Cancel",
+                    callback_data="cancel_report",
+                )
+            ],
+        ]
+    )
+
+
+def admin_report_keyboard(report_id: str, accused: str, evidence: str):
+    rows = [
+        [
+            InlineKeyboardButton(
+                text="✅ Approve",
+                callback_data=f"approve:{report_id}",
+            ),
+            InlineKeyboardButton(
+                text="❌ Reject",
+                callback_data=f"reject:{report_id}",
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text="📂 View Proofs",
+                url=evidence,
+            )
+        ],
+    ]
+
+    url = profile_url(accused)
+
+    if url:
+        rows.append(
+            [
+                InlineKeyboardButton(
+                    text="👤 View Profile",
+                    url=url,
+                )
+            ]
+        )
+
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def public_post_keyboard(accused: str, evidence: str):
+    row = []
+
+    url = profile_url(accused)
+
+    if url:
+        row.append(
+            InlineKeyboardButton(
+                text="👤 View Profile",
+                url=url,
+            )
+        )
+
+    row.append(
+        InlineKeyboardButton(
+            text="📂 View Proofs",
+            url=evidence,
+        )
+    )
+
+    return InlineKeyboardMarkup(
+        inline_keyboard=[row]
+    )
+
+
+def status_text(status: str) -> str:
+    mapping = {
+        "pending": "⏳ Pending Review",
+        "approved": "✅ Approved",
+        "rejected": "❌ Rejected",
+    }
+
+    return mapping.get(status, status)
+
+
+async def safe_send_message(chat_id: int, text: str, **kwargs):
+    try:
+        return await bot.send_message(
+            chat_id=chat_id,
+            text=text,
+            **kwargs,
+        )
+
+    except (TelegramForbiddenError, TelegramBadRequest) as error:
+        logger.warning(
+            "Could not send message to %s: %s",
+            chat_id,
+            error,
+        )
+
+        return None
+
+
+# ============================================================
+# START
+# ============================================================
+
+@router.message(CommandStart())
+async def start_handler(message: Message, state: FSMContext):
+    add_or_update_user(message.from_user)
+    await state.clear()
+
+    text = (
+        "<b>🛡️ WELCOME TO AVOID REPORTS</b>\n\n"
+        "A community-driven reporting platform designed to help "
+        "users submit reports related to potentially fraudulent deals.\n\n"
+        "📋 Every submitted report is manually reviewed by the "
+        "moderation team before publication.\n\n"
+        "⚠️ False, incomplete, misleading, or manipulated reports "
+        "may be rejected.\n\n"
+        "Choose an option below to continue.\n\n"
+        f"🛡️ <b>{esc(CHANNEL_USERNAME)}</b>"
+    )
+
+    await message.answer(
+        text,
+        parse_mode=ParseMode.HTML,
+        reply_markup=main_menu(),
+    )
+
+
+@router.callback_query(F.data == "main_menu")
+async def main_menu_callback(
+    callback: CallbackQuery,
+    state: FSMContext,
+):
+    await state.clear()
+
+    await callback.message.edit_text(
+        "<b>🛡️ AVOID REPORTS</b>\n\n"
+        "Choose an option below.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=main_menu(),
+    )
+
+    await callback.answer()
+
+
+# ============================================================
+# CREATE REPORT
+# ============================================================
+
+@router.callback_query(F.data == "create_report")
+async def create_report_callback(
+    callback: CallbackQuery,
+    state: FSMContext,
+):
+    add_or_update_user(callback.from_user)
+
+    if is_user_banned(callback.from_user.id):
+        await callback.answer(
+            "Your reporting access is restricted.",
+            show_alert=True,
+        )
+        return
+
+    await state.clear()
+    await state.set_state(ReportStates.choosing_platform)
+
+    await callback.message.edit_text(
+        "<b>🚨 CREATE A NEW REPORT</b>\n\n"
+        "Please select the platform where the incident occurred.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=platform_keyboard(),
+    )
+
+    await callback.answer()
+
+
+@router.callback_query(
+    ReportStates.choosing_platform,
+    F.data.startswith("platform:"),
+)
+async def platform_callback(
+    callback: CallbackQuery,
+    state: FSMContext,
+):
+    platform = callback.data.split(":", 1)[1]
+
+    await state.update_data(platform=platform)
+    await state.set_state(ReportStates.waiting_accused)
+
+    await callback.message.edit_text(
+        "<b>👤 REPORTED ACCOUNT INFORMATION</b>\n\n"
+        "Please send the username of the account you want to report.\n\n"
+        "Example:\n"
+        "<code>@username</code>\n\n"
+        "For Telegram reports, you may also send a numeric Telegram "
+        "User ID if the account has no username.\n\n"
+        "⚠️ Make sure you are reporting the correct account.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=cancel_keyboard(),
+    )
+
+    await callback.answer()
+
+
+@router.message(ReportStates.waiting_accused)
+async def accused_handler(
+    message: Message,
+    state: FSMContext,
+):
+    if not message.text:
+        await message.answer(
+            "❌ Please send a username or numeric User ID."
+        )
+        return
+
+    accused = message.text.strip()
+
+    if not valid_accused(accused):
+        await message.answer(
+            "❌ Invalid username or User ID.\n\n"
+            "Send a username like:\n"
+            "<code>@username</code>\n\n"
+            "Or a numeric Telegram User ID.",
+            parse_mode=ParseMode.HTML,
+        )
+        return
+
+    await state.update_data(accused=accused)
+    await state.set_state(ReportStates.waiting_amount)
+
+    await message.answer(
+        "<b>💰 DEAL VALUE</b>\n\n"
+        "Enter the total amount involved in the deal.\n\n"
+        "Examples:\n"
+        "<code>$100</code>\n"
+        "<code>₹5,000</code>\n"
+        "<code>100 USDT</code>\n\n"
+        "If no money was involved, send:\n"
+        "<code>0</code>",
+        parse_mode=ParseMode.HTML,
+        reply_markup=cancel_keyboard(),
+    )
+
+
+@router.message(ReportStates.waiting_amount)
+async def amount_handler(
+    message: Message,
+    state: FSMContext,
+):
+    if not message.text:
+        await message.answer(
+            "❌ Please enter the deal value as text."
+        )
+        return
+
+    amount = message.text.strip()
+
+    if len(amount) > 100:
+        await message.answer(
+            "❌ Deal value is too long."
+        )
+        return
+
+    await state.update_data(deal_value=amount)
+    await state.set_state(ReportStates.waiting_description)
+
+    await message.answer(
+        "<b>📝 INCIDENT DETAILS</b>\n\n"
+        "Briefly explain what happened.\n\n"
+        "Please include:\n\n"
+        "• What the deal was for\n"
+        "• What you paid, sent, or provided\n"
+        "• What the other party agreed to do\n"
+        "• What went wrong\n\n"
+        "Keep your explanation clear and factual.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=cancel_keyboard(),
+    )
+
+
+@router.message(ReportStates.waiting_description)
+async def description_handler(
+    message: Message,
+    state: FSMContext,
+):
+    if not message.text:
+        await message.answer(
+            "❌ Please send the incident description as text."
+        )
+        return
+
+    description = message.text.strip()
+
+    if len(description) < 20:
+        await message.answer(
+            "❌ Description is too short. Please provide at least "
+            "20 characters."
+        )
+        return
+
+    if len(description) > 3000:
+        await message.answer(
+            "❌ Description is too long. Maximum is 3000 characters."
+        )
+        return
+
+    await state.update_data(description=description)
+    await state.set_state(ReportStates.waiting_evidence)
+
+    await message.answer(
+        "<b>📂 SUBMIT EVIDENCE</b>\n\n"
+        "Create a Telegram channel containing all relevant evidence "
+        "and send the channel link here.\n\n"
+        "Your evidence should preferably include:\n\n"
+        "• Full conversation screenshots\n"
+        "• Screen recording of the conversation\n"
+        "• Reported account's profile\n"
+        "• Username and User ID, if available\n"
+        "• Payment or transaction proof\n"
+        "• Other relevant evidence\n\n"
+        "Example:\n"
+        "<code>https://t.me/+xxxxxxxx</code>\n\n"
+        "⚠️ Incomplete or manipulated evidence may result in rejection.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=cancel_keyboard(),
+    )
+
+
+@router.message(ReportStates.waiting_evidence)
+async def evidence_handler(
+    message: Message,
+    state: FSMContext,
+):
+    if not message.text:
+        await message.answer(
+            "❌ Please send the Telegram evidence channel link."
+        )
+        return
+
+    evidence = message.text.strip()
+
+    if not valid_telegram_link(evidence):
+        await message.answer(
+            "❌ Invalid Telegram link.\n\n"
+            "The link must begin with:\n"
+            "<code>https://t.me/</code>",
+            parse_mode=ParseMode.HTML,
+        )
+        return
+
+    await state.update_data(evidence_link=evidence)
+
+    data = await state.get_data()
+
+    preview = (
+        "<b>🔎 REVIEW YOUR REPORT</b>\n\n"
+        "━━━━━━━━━━━━━━━━━━\n\n"
+        "<b>🚨 REPORT DETAILS</b>\n\n"
+        f"📱 <b>Platform:</b> {esc(data['platform'])}\n"
+        f"👤 <b>Reported Account:</b> {esc(data['accused'])}\n"
+        f"💰 <b>Deal Value:</b> {esc(data['deal_value'])}\n\n"
+        "<b>📝 Incident Details:</b>\n\n"
+        f"{esc(data['description'])}\n\n"
+        f"📂 <b>Evidence:</b>\n{esc(data['evidence_link'])}\n\n"
+        "━━━━━━━━━━━━━━━━━━\n\n"
+        "⚠️ By submitting this report, you confirm that the information "
+        "provided is accurate to the best of your knowledge."
+    )
+
+    await state.set_state(ReportStates.reviewing)
+
+    await message.answer(
+        preview,
+        parse_mode=ParseMode.HTML,
+        reply_markup=review_keyboard(),
+        disable_web_page_preview=True,
+    )
+
+
+@router.callback_query(F.data == "cancel_report")
+async def cancel_report_callback(
+    callback: CallbackQuery,
+    state: FSMContext,
+):
+    await state.clear()
+
+    await callback.message.edit_text(
+        "<b>❌ REPORT CANCELLED</b>\n\n"
+        "No report was submitted.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=main_menu(),
+    )
+
+    await callback.answer()
+
+
+# ============================================================
+# SUBMIT REPORT
+# ============================================================
+
+@router.callback_query(
+    ReportStates.reviewing,
+    F.data == "submit_report",
+)
+async def submit_report_callback(
+    callback: CallbackQuery,
+    state: FSMContext,
+):
+    if is_user_banned(callback.from_user.id):
+        await callback.answer(
+            "Your reporting access is restricted.",
+            show_alert=True,
+        )
+        return
+
+    data = await state.get_data()
+
+    required = {
+        "platform",
+        "accused",
+        "deal_value",
+        "description",
+        "evidence_link",
+    }
+
+    if not required.issubset(data):
+        await callback.answer(
+            "Report data is incomplete. Please start again.",
+            show_alert=True,
+        )
+        return
+
+    report_id = create_report(
+        reporter_id=callback.from_user.id,
+        reporter_username=callback.from_user.username,
+        platform=data["platform"],
+        accused=data["accused"],
+        deal_value=data["deal_value"],
+        description=data["description"],
+        evidence_link=data["evidence_link"],
+    )
+
+    reporter_username = (
+        f"@{callback.from_user.username}"
+        if callback.from_user.username
+        else "No username"
+    )
+
+    admin_text = (
+        "<b>🚨 NEW REPORT RECEIVED</b>\n\n"
+        "━━━━━━━━━━━━━━━━━━\n\n"
+        f"🆔 <b>Report ID:</b> #{esc(report_id)}\n"
+        "⏳ <b>Status:</b> PENDING REVIEW\n\n"
+        "<b>👤 REPORTER</b>\n\n"
+        f"Username: {esc(reporter_username)}\n"
+        f"User ID: <code>{callback.from_user.id}</code>\n\n"
+        "<b>🚨 REPORTED ACCOUNT</b>\n\n"
+        f"Platform: {esc(data['platform'])}\n"
+        f"Account: {esc(data['accused'])}\n\n"
+        "<b>💰 DEAL VALUE</b>\n\n"
+        f"{esc(data['deal_value'])}\n\n"
+        "<b>📝 INCIDENT DETAILS</b>\n\n"
+        f"{esc(data['description'])}\n\n"
+        "<b>📂 EVIDENCE</b>\n\n"
+        f"{esc(data['evidence_link'])}\n\n"
+        "━━━━━━━━━━━━━━━━━━"
+    )
+
+    admin_message = await safe_send_message(
+        ADMIN_CHAT_ID,
+        admin_text,
+        parse_mode=ParseMode.HTML,
+        reply_markup=admin_report_keyboard(
+            report_id,
+            data["accused"],
+            data["evidence_link"],
+        ),
+        disable_web_page_preview=True,
+    )
+
+    if admin_message:
+        set_admin_message_id(
+            report_id,
+            admin_message.message_id,
+        )
+
+    await state.clear()
+
+    await callback.message.edit_text(
+        "<b>✅ REPORT SUBMITTED SUCCESSFULLY</b>\n\n"
+        "Your report has been sent to the AVOID REPORTS moderation "
+        "team for manual review.\n\n"
+        f"🆔 <b>Report ID:</b> #{esc(report_id)}\n"
+        "⏳ <b>Status:</b> Pending Review\n\n"
+        "You will receive an update after your report is reviewed.\n\n"
+        "⚠️ False reports or manipulated evidence may result in "
+        "reporting restrictions.\n\n"
+        f"🛡️ <b>{esc(CHANNEL_USERNAME)}</b>",
+        parse_mode=ParseMode.HTML,
+        reply_markup=main_menu(),
+    )
+
+    await callback.answer("Report submitted.")
+
+
+# ============================================================
+# ADMIN APPROVE
+# ============================================================
+
+@router.callback_query(F.data.startswith("approve:"))
+async def approve_callback(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id):
+        await callback.answer(
+            "You are not authorized.",
+            show_alert=True,
+        )
+        return
+
+    report_id = callback.data.split(":", 1)[1]
+    report = get_report(report_id)
+
+    if not report:
+        await callback.answer(
+            "Report not found.",
+            show_alert=True,
+        )
+        return
+
+    if report["status"] != "pending":
+        await callback.answer(
+            f"This report is already {report['status']}.",
+            show_alert=True,
+        )
+        return
+
+    caption = (
+        "<b>🚨 COMMUNITY SAFETY REPORT</b>\n\n"
+        "━━━━━━━━━━━━━━━━━━\n\n"
+        f"🆔 <b>REPORT ID</b>\n"
+        f"#{esc(report['report_id'])}\n\n"
+        f"👤 <b>REPORTED ACCOUNT</b>\n"
+        f"{esc(report['accused'])}\n\n"
+        f"📱 <b>PLATFORM</b>\n"
+        f"{esc(report['platform'])}\n\n"
+        f"💰 <b>REPORTED DEAL VALUE</b>\n"
+        f"{esc(report['deal_value'])}\n\n"
+        f"📝 <b>INCIDENT SUMMARY</b>\n\n"
+        f"{esc(report['description'])}\n\n"
+        "📂 <b>EVIDENCE</b>\n\n"
+        "Supporting evidence is available through the button below.\n\n"
+        "━━━━━━━━━━━━━━━━━━\n\n"
+        "⚠️ This post records a community-submitted report reviewed "
+        "by the moderation team based on the evidence provided. "
+        "Users should review the available evidence and make their "
+        "own assessment before dealing.\n\n"
+        f"🛡️ <b>AVOID REPORTS</b>\n"
+        f"{esc(CHANNEL_USERNAME)}"
+    )
+
+    try:
+        if BANNER_PATH.exists():
+            sent_post = await bot.send_photo(
+                chat_id=CHANNEL_USERNAME,
+                photo=FSInputFile(BANNER_PATH),
+                caption=caption,
+                parse_mode=ParseMode.HTML,
+                reply_markup=public_post_keyboard(
+                    report["accused"],
+                    report["evidence_link"],
+                ),
+            )
+
+        else:
+            sent_post = await bot.send_message(
+                chat_id=CHANNEL_USERNAME,
+                text=caption,
+                parse_mode=ParseMode.HTML,
+                reply_markup=public_post_keyboard(
+                    report["accused"],
+                    report["evidence_link"],
+                ),
+                disable_web_page_preview=True,
+            )
+
+    except Exception as error:
+        logger.exception(
+            "Could not publish report %s",
+            report_id,
+        )
+
+        await callback.answer(
+            f"Publishing failed: {str(error)[:150]}",
+            show_alert=True,
+        )
+        return
+
+    approve_report_db(
+        report_id=report_id,
+        admin_id=callback.from_user.id,
+        channel_message_id=sent_post.message_id,
+    )
+
+    try:
+        await callback.message.edit_text(
+            callback.message.html_text
+            + "\n\n"
+            + "━━━━━━━━━━━━━━━━━━\n\n"
+            + "✅ <b>APPROVED & PUBLISHED</b>",
+            parse_mode=ParseMode.HTML,
+            disable_web_page_preview=True,
+        )
+
+    except TelegramBadRequest:
+        pass
+
+    channel_post_url = (
+        f"{CHANNEL_LINK}/{sent_post.message_id}"
+    )
+
+    await safe_send_message(
+        report["reporter_id"],
+        "<b>✅ YOUR REPORT HAS BEEN APPROVED</b>\n\n"
+        f"🆔 <b>Report ID:</b> #{esc(report_id)}\n\n"
+        "Your report has been reviewed and approved by the "
+        "AVOID REPORTS moderation team.\n\n"
+        f"The report has been published to {esc(CHANNEL_USERNAME)}.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(
+                        text="📢 View Published Report",
+                        url=channel_post_url,
+                    )
+                ]
+            ]
+        ),
+    )
+
+    await callback.answer(
+        "Approved and published.",
+        show_alert=True,
+    )
+
+
+# ============================================================
+# ADMIN REJECT
+# ============================================================
+
+@router.callback_query(F.data.startswith("reject:"))
+async def reject_callback(
+    callback: CallbackQuery,
+    state: FSMContext,
+):
+    if not is_admin(callback.from_user.id):
+        await callback.answer(
+            "You are not authorized.",
+            show_alert=True,
+        )
+        return
+
+    report_id = callback.data.split(":", 1)[1]
+    report = get_report(report_id)
+
+    if not report:
+        await callback.answer(
+            "Report not found.",
+            show_alert=True,
+        )
+        return
+
+    if report["status"] != "pending":
+        await callback.answer(
+            f"This report is already {report['status']}.",
+            show_alert=True,
+        )
+        return
+
+    await state.set_state(
+        AdminStates.waiting_rejection_reason
+    )
+
+    await state.update_data(
+        rejection_report_id=report_id
+    )
+
+    await callback.message.answer(
+        "<b>❌ REJECT REPORT</b>\n\n"
+        f"Report: <b>#{esc(report_id)}</b>\n\n"
+        "Send the rejection reason now.\n\n"
+        "Example:\n"
+        "<i>Insufficient or incomplete evidence.</i>",
+        parse_mode=ParseMode.HTML,
+    )
+
+    await callback.answer()
+
+
+@router.message(AdminStates.waiting_rejection_reason)
+async def rejection_reason_handler(
+    message: Message,
+    state: FSMContext,
+):
+    if not is_admin(message.from_user.id):
+        await state.clear()
+        return
+
+    if not message.text:
+        await message.answer(
+            "Please send the rejection reason as text."
+        )
+        return
+
+    reason = message.text.strip()
+
+    if len(reason) < 3:
+        await message.answer(
+            "Rejection reason is too short."
+        )
+        return
+
+    data = await state.get_data()
+    report_id = data.get("rejection_report_id")
+
+    report = get_report(report_id)
+
+    if not report:
+        await state.clear()
+
+        await message.answer(
+            "❌ Report not found."
+        )
+        return
+
+    if report["status"] != "pending":
+        await state.clear()
+
+        await message.answer(
+            f"Report is already {report['status']}."
+        )
+        return
+
+    reject_report_db(
+        report_id=report_id,
+        admin_id=message.from_user.id,
+        reason=reason,
+    )
+
+    await safe_send_message(
+        report["reporter_id"],
+        "<b>❌ REPORT REJECTED</b>\n\n"
+        f"🆔 <b>Report ID:</b> #{esc(report_id)}\n\n"
+        "Your report was reviewed but could not be approved.\n\n"
+        "<b>Reason:</b>\n\n"
+        f"{esc(reason)}\n\n"
+        "You may submit a new report if you can provide complete "
+        "and verifiable information or evidence.\n\n"
+        f"🛡️ <b>{esc(CHANNEL_USERNAME)}</b>",
+        parse_mode=ParseMode.HTML,
+    )
+
+    await state.clear()
+
+    await message.answer(
+        f"✅ Report #{esc(report_id)} rejected.",
+        parse_mode=ParseMode.HTML,
+    )
+
+
+# ============================================================
+# SEARCH REPORTS
+# ============================================================
+
+@router.callback_query(F.data == "search_reports")
+async def search_reports_callback(
+    callback: CallbackQuery,
+    state: FSMContext,
+):
+    await state.clear()
+    await state.set_state(SearchStates.waiting_query)
+
+    await callback.message.edit_text(
+        "<b>🔍 SEARCH REPORTS</b>\n\n"
+        "Send an exact username or numeric User ID.\n\n"
+        "Examples:\n"
+        "<code>@username</code>\n"
+        "<code>123456789</code>",
+        parse_mode=ParseMode.HTML,
+        reply_markup=InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(
+                        text="🏠 Main Menu",
+                        callback_data="main_menu",
+                    )
+                ]
+            ]
+        ),
+    )
+
+    await callback.answer()
+
+
+@router.message(SearchStates.waiting_query)
+async def search_query_handler(
+    message: Message,
+    state: FSMContext,
+):
+    if not message.text:
+        await message.answer(
+            "Please send a username or User ID."
+        )
+        return
+
+    query = message.text.strip()
+
+    reports = search_approved_reports(query)
+
+    await state.clear()
+
+    if not reports:
+        await message.answer(
+            "<b>✅ NO APPROVED REPORT FOUND</b>\n\n"
+            "No approved report was found for this username or "
+            "User ID in the AVOID REPORTS database.\n\n"
+            "⚠️ This does not guarantee that an account is trustworthy. "
+            "Always verify independently before making a deal.",
+            parse_mode=ParseMode.HTML,
+            reply_markup=main_menu(),
+        )
+        return
+
+    report_ids = "\n".join(
+        f"• #{esc(report['report_id'])}"
+        for report in reports
+    )
+
+    await message.answer(
+        "<b>🚨 APPROVED REPORTS FOUND</b>\n\n"
+        f"👤 <b>Account:</b> {esc(query)}\n"
+        f"📊 <b>Approved Reports:</b> {len(reports)}\n\n"
+        "<b>Report IDs:</b>\n"
+        f"{report_ids}\n\n"
+        "⚠️ Review available evidence before making your own decision.",
+        parse_mode=ParseMode.HTML,
+        reply_markup=main_menu(),
+    )
+
+
+# ============================================================
+# MY REPORTS
+# ============================================================
+
+@router.callback_query(F.data == "my_reports")
+async def my_reports_callback(callback: CallbackQuery):
+    reports = get_user_reports(callback.from_user.id)
+
+    if not reports:
+        await callback.message.edit_text(
+            "<b>📋 MY REPORTS</b>\n\n"
+            "You have not submitted any reports yet.",
+            parse_mode=ParseMode.HTML,
+            reply_markup=main_menu(),
+        )
+
+        await callback.answer()
+        return
+
+    lines = []
+
+    for index, report in enumerate(reports, start=1):
+        lines.append(
+            f"{index}. <b>#{esc(report['report_id'])}</b>\n"
+            f"Account: {esc(report['accused'])}\n"
+            f"Status: {status_text(report['status'])}"
+        )
+
+    await callback.message.edit_text(
+        "<b>📋 MY REPORTS</b>\n\n"
+        + "\n\n".join(lines),
+        parse_mode=ParseMode.HTML,
+        reply_markup=main_menu(),
+    )
+
+    await callback.answer()
+
+
+# ============================================================
+# ADMIN COMMANDS
+# ============================================================
+
+@router.message(Command("admin"))
+async def admin_command(message: Message):
+    if not is_admin(message.from_user.id):
+        return
+
+    with db_connect() as conn:
+        total = conn.execute(
+            "SELECT COUNT(*) AS c FROM reports"
+        ).fetchone()["c"]
+
+        pending = conn.execute(
+            """
+            SELECT COUNT(*) AS c
+            FROM reports
+            WHERE status = 'pending'
+            """
+        ).fetchone()["c"]
+
+        approved = conn.execute(
+            """
+            SELECT COUNT(*) AS c
+            FROM reports
+            WHERE status = 'approved'
+            """
+        ).fetchone()["c"]
+
+        rejected = conn.execute(
+            """
+            SELECT COUNT(*) AS c
+            FROM reports
+            WHERE status = 'rejected'
+            """
+        ).fetchone()["c"]
+
+        users = conn.execute(
+            "SELECT COUNT(*) AS c FROM users"
+        ).fetchone()["c"]
+
+    await message.answer(
+        "<b>🛡️ AVOID REPORTS — ADMIN PANEL</b>\n\n"
+        f"👥 Total Users: <b>{users}</b>\n\n"
+        f"📋 Total Reports: <b>{total}</b>\n"
+        f"⏳ Pending: <b>{pending}</b>\n"
+        f"✅ Approved: <b>{approved}</b>\n"
+        f"❌ Rejected: <b>{rejected}</b>",
+        parse_mode=ParseMode.HTML,
+    )
+
+
+@router.message(Command("ban"))
+async def ban_command(message: Message):
+    if not is_admin(message.from_user.id):
+        return
+
+    parts = message.text.split()
+
+    if len(parts) != 2 or not parts[1].isdigit():
+        await message.answer(
+            "Usage:\n<code>/ban USER_ID</code>",
+            parse_mode=ParseMode.HTML,
+        )
+        return
+
+    user_id = int(parts[1])
+
+    set_user_banned(
+        user_id,
+        True,
+    )
+
+    await message.answer(
+        f"🚫 User <code>{user_id}</code> has been banned "
+        "from submitting reports.",
+        parse_mode=ParseMode.HTML,
+    )
+
+
+@router.message(Command("unban"))
+async def unban_command(message: Message):
+    if not is_admin(message.from_user.id):
+        return
+
+    parts = message.text.split()
+
+    if len(parts) != 2 or not parts[1].isdigit():
+        await message.answer(
+            "Usage:\n<code>/unban USER_ID</code>",
+            parse_mode=ParseMode.HTML,
+        )
+        return
+
+    user_id = int(parts[1])
+
+    set_user_banned(
+        user_id,
+        False,
+    )
+
+    await message.answer(
+        f"✅ User <code>{user_id}</code> has been unbanned.",
+        parse_mode=ParseMode.HTML,
+    )
+
+
+@router.message(Command("chatid"))
+async def chat_id_command(message: Message):
+    await message.answer(
+        f"Chat ID:\n<code>{message.chat.id}</code>",
+        parse_mode=ParseMode.HTML,
+    )
+
+
+# ============================================================
+# START BOT
+# ============================================================
+
+async def main():
+    init_db()
+
+    logger.info("Starting AVOID REPORTS bot...")
+
+    await bot.delete_webhook(
+        drop_pending_updates=False
+    )
+
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+
+    except KeyboardInterrupt:
+        logger.info("Bot stopped.")
